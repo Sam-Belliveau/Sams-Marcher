@@ -30,7 +30,7 @@ namespace sb {
     public: // Functions
 
         Ray operator()(const std::size_t x, const std::size_t y) {
-            double dx = 2.0 * (double(x) / double(_width) - 0.5);
+            double dx = 2.0 * (double(x) / double(_width) - 0.5) * double(_width) / double(_height);
             double dy = 2.0 * (double(y) / double(_height) - 0.5);
 
             return Ray(

@@ -42,7 +42,7 @@ namespace sb {
         }
     
     public: // Functions
-        Vec3d normal(const Vec3d& pos, const double eps = 1e-3) const {
+        Vec3d normal(const Vec3d& pos, const double eps = 1e-6) const {
             const double dist = operator()(pos);
             return Vec3d(
                 operator()(pos + Vec3d(eps, 0, 0)) - operator()(pos - Vec3d(eps, 0, 0)),

@@ -41,6 +41,11 @@ namespace sb {
             const Vec3d n = sdf.normal(pos());
             return Ray(pos(), d - 2 * n * (d.dot(n)));
         }
+
+        Ray fix(SDF sdf, double eps = 1e-2) {
+            const Vec3d n = sdf.normal(pos());
+            return Ray(pos() + eps * n, dir());
+        }
     };
 
 }
