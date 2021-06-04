@@ -1,0 +1,3 @@
+[submodule "SPGL"]
+	path = src/SPGL
+	url = https://github.com/Sam-Belliveau/SPGL
