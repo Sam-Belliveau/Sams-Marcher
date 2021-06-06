@@ -2,6 +2,7 @@
 #include <string>
 
 #include "SPGL/SPGL/SPGL.hpp"
+#include "light.hpp"
 #include "camera.hpp"
 
 using namespace sb;
@@ -9,8 +10,11 @@ using namespace sb;
 const std::size_t width = 640;
 const std::size_t height = 480;
 
-int march(SDF sdf, Ray r) {
+const Light light = Light(Vec3d(0, 3, 2));
+
+SPGL::Color march(SDF sdf, Ray r) {
     const double EPS = 1e-2;
+    SPGL::Color out = SPGL::Color::Black;
 
     int hits = 0;
     double step = 0;
@@ -22,19 +26,20 @@ int march(SDF sdf, Ray r) {
             break;
         }
 
-        if(9 < hits) {
+        if(10 < hits) {
             break;
         }
 
         if(step < EPS) {
             hits += 1;
+            out += light.getColor(sdf, r);
             r = r.reflect(sdf).fix(sdf);
         } else {
             r = r.step(step);
         }
     }
 
-    return hits;
+    return out;
 }
 
 int main() {
@@ -52,7 +57,7 @@ int main() {
         cam.set_pos(Vec3d(5*std::cos(t), 0, 5*std::sin(t)));
         for(int y = 0; y < height; ++y) {
             for(int x = 0; x < width; ++x) {
-                img(x, y) = SPGL::Color(SPGL::UInt8(20 + 20 * march(scene, cam(x, y))));
+                img(x, y) = march(scene, cam(x, y));
             }   
             window.renderImage(img);
             window.update();

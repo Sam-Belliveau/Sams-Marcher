@@ -40,12 +40,7 @@ namespace sb {
             double brightness = mat.k_a;
             brightness = mat.k_d * (normal.dot(rel_pos));
 
-            double r = std::min(255.0, std::max(0.0, (_color.r * brightness)));
-            double g = std::min(255.0, std::max(0.0, (_color.r * brightness)));
-            double b = std::min(255.0, std::max(0.0, (_color.r * brightness)));
-            
-            return SPGL::Color(SPGL::UInt8(r), SPGL::UInt8(g), SPGL::UInt8(b));
-
+            return brightness * _color;
         }
     }
 
