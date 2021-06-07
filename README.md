@@ -1,4 +1,4 @@
 # Sam-Marcher
 
 ## It looks like
-![what it looks like](https://imgur.com/cWZFxWd)
+![what it looks like](https://i.imgur.com/cWZFxWd.jpg)
