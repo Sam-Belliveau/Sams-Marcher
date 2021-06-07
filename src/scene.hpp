@@ -44,7 +44,7 @@ namespace sb {
                 }
 
                 if(step < EPS) {
-                    double darkness = std::pow(REFLECTIVE_DAMPENING, hits - 1);
+                    double darkness = std::pow(REFLECTIVE_DAMPENING, hits);
 
                     for(const Light& l : lights) {
                         out += l.getColor(scene, ray) / darkness;

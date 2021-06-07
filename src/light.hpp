@@ -30,7 +30,7 @@ namespace sb {
     
     };
 
-    const Material DEFAULT_MATERIAL = Material(2, 0.5, 0.1, 96);
+    const Material DEFAULT_MATERIAL = Material(4, 1, 0.1, 96);
     
     class Light {
     private:
@@ -70,6 +70,7 @@ namespace sb {
             // Relative Position / Distance
             const Vec3d rel_pos = _pos - ray.pos();
             const double dist = rel_pos.mag();
+            const double dist_sqr = dist * dist;
 
             // Ambient Lighting
             double brightness = mat.k_a;
@@ -84,7 +85,7 @@ namespace sb {
             }
 
             // Return Color Multiplied by Brightness
-            return (_bright * brightness / (dist * dist)) * _color;
+            return (_bright * brightness / dist_sqr) * _color;
         }
     };
 

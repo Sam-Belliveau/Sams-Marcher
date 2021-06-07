@@ -18,13 +18,13 @@ namespace sb {
     const double FIXING_RATIO = 4;
 
     // How much darker the reflections should be
-    const double REFLECTIVE_DAMPENING = 3;
+    const double REFLECTIVE_DAMPENING = 2.5;
 
     // Max amount of distance Ray Marching should go without assuming it will tend to infinity
     const double MAX_STEP = 32;
 
     // Number of threads the CPU should use
-    const int THREADS = 16;
+    const int THREADS = 24;
 
     // Resolution
     const int WIDTH = 1280;
