@@ -35,12 +35,12 @@ namespace sb {
     private: // Helper Functions
         double getMarchClearance(const SDF& sdf, const Vec3d& pos) const {
             SDF lightSDF([=](const Vec3d& pos){ return (_pos - pos).mag(); });
-            Ray ray = Ray(pos, _pos - pos).fix(sdf, FIX_EPS);
+            Ray ray = Ray(pos, _pos - pos).fix(sdf, FIXING_RATIO * LIGHTING_EPS);
 
             for(int i = 0; i < MAX_MARCH_ITER_LIGHTING; ++i) {
                 double step = sdf(ray.pos());
 
-                if(step < EPS) {
+                if(step < LIGHTING_EPS) {
                     return 0.0;
                 }
 

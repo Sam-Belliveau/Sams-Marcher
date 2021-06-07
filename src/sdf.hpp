@@ -49,12 +49,17 @@ namespace sb {
         }
     
     public: // Functions
-        Vec3d normal(const Vec3d& pos, const double eps = 1e-6) const {
-            return Vec3d(
-                operator()(pos + Vec3d(eps, 0, 0)) - operator()(pos - Vec3d(eps, 0, 0)),
-                operator()(pos + Vec3d(0, eps, 0)) - operator()(pos - Vec3d(0, eps, 0)),
-                operator()(pos + Vec3d(0, 0, eps)) - operator()(pos - Vec3d(0, 0, eps))
-            ).normalize();
+        Vec3d normal(const Vec3d& pos) const {
+            static const Vec3d xyy(+1, -1, -1);
+            static const Vec3d yyx(-1, -1, +1);
+            static const Vec3d yxy(-1, +1, -1);
+            static const Vec3d xxx(+1, +1, +1);
+            
+            return (
+                xyy * operator()(pos + NORM_EPS * xyy) += 
+                yyx * operator()(pos + NORM_EPS * yyx) += 
+                yxy * operator()(pos + NORM_EPS * yxy) += 
+                xxx * operator()(pos + NORM_EPS * xxx)).normalize();
         }
 
     public: // Operator Overloading (Construction)
@@ -62,7 +67,7 @@ namespace sb {
         // Constructing SDFs
         SDF operator~() const {
             return SDF([=](const Vec3d& pos) {
-                return -operator()(pos);
+                return -_func(pos);
             });
         }
 

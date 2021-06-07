@@ -2,15 +2,17 @@
 #define SAM_B_CONSTANTS_HPP
 
 namespace sb {
-    const int MAX_HITS = 3;
+    const int MAX_HITS = 2;
     const int MAX_MARCH_ITER = 96;
-    const int MAX_MARCH_ITER_LIGHTING = 64;
+    const int MAX_MARCH_ITER_LIGHTING = 96;
 
     const double EPS = 1e-2;
-    const double FIX_EPS = 2e-2;
+    const double NORM_EPS = 1e-4;
+    const double LIGHTING_EPS = 1e-2;
+
+    const double FIXING_RATIO = 4;
 
     const double MAX_STEP = 64;
-    
 }
 
 #endif
