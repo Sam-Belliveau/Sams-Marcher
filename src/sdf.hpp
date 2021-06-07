@@ -27,6 +27,13 @@ namespace sb {
             });
         }
 
+        static SDF Plane(const Vec3d normal, const double h) {
+            const Vec3d normed_normal = normal.norm();
+            return SDF([=](const Vec3d& pos) {
+                return normed_normal.dot(pos) + h;
+            });
+        }
+
     private: // Variables
         SDFBase _func;
 
@@ -43,7 +50,6 @@ namespace sb {
     
     public: // Functions
         Vec3d normal(const Vec3d& pos, const double eps = 1e-6) const {
-            const double dist = operator()(pos);
             return Vec3d(
                 operator()(pos + Vec3d(eps, 0, 0)) - operator()(pos - Vec3d(eps, 0, 0)),
                 operator()(pos + Vec3d(0, eps, 0)) - operator()(pos - Vec3d(0, eps, 0)),
@@ -87,9 +93,25 @@ namespace sb {
             return rhs + lhs;
         }
 
+        friend SDF operator+(const SDF& lhs, const double rhs) {
+            return SDF([=](const Vec3d& pos) {
+                return lhs(pos) - rhs;
+            });
+        }
+
+        friend SDF operator+(const double lhs, const SDF& rhs) {
+            return rhs + lhs;
+        }
+
         friend SDF operator-(const SDF& lhs, const Vec3d& rhs) {
             return SDF([=](const Vec3d& pos) {
                 return lhs(pos + rhs);
+            });
+        }
+
+        friend SDF operator-(const SDF& lhs, const double rhs) {
+            return SDF([=](const Vec3d& pos) {
+                return lhs(pos) + rhs;
             });
         }
 
