@@ -38,8 +38,7 @@ namespace sb {
             _dir = (-pos).norm();
         }
 
-        Ray operator()(const std::size_t x, const std::size_t y) {
-            _dir.normalize();
+        Ray operator()(const std::size_t x, const std::size_t y) const {
             const Vec3d x_dir = Vec3d(_dir.z, 0, -_dir.x).normalize();
             const Vec3d y_dir = Vec3d(_dir.x*_dir.y, _dir.y - std::hypot(_dir.x, _dir.z), _dir.z*_dir.y).normalize(); 
 

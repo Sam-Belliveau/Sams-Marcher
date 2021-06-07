@@ -4,9 +4,9 @@ CC = g++
 # compiler flags:
 #  -g    adds debugging information to the executable file
 #  -Wall turns on most, but not all, compiler warnings
-CFLAGS  = -Wall -std=c++17 -lpthread -O3
+CFLAGS  = -Wall -std=c++17 -O3
 INCLUDES = -I/opt/homebrew/include -D_THREAD_SAFE
-LFLAGS = -L/opt/homebrew/lib -lSDL2
+LFLAGS = -L/opt/homebrew/lib -lSDL2 -lpthread
 
 # the build target executable:
 TARGET = bin/marcher
