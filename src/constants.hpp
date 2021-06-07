@@ -13,6 +13,11 @@ namespace sb {
     const double FIXING_RATIO = 4;
 
     const double MAX_STEP = 64;
+
+    const int THREADS = 16;
+
+    const int WIDTH = 720;
+    const int HEIGHT = 480;
 }
 
 #endif
