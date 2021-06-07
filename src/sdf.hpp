@@ -64,80 +64,78 @@ namespace sb {
 
     public: // Operator Overloading (Construction)
 
-        // Constructing SDFs
-        SDF operator~() const {
+        // Invert the shape
+        friend SDF operator~(const SDF& a) {
             return SDF([=](const Vec3d& pos) {
-                return -_func(pos);
+                return -a(pos);
             });
         }
 
+        // Union two shapes together
         friend SDF operator|(const SDF& lhs, const SDF& rhs) {
             return SDF([=](const Vec3d& pos) {
                 return std::min(lhs(pos), rhs(pos));
             });
         }
 
+        // Get the intersection of two shapes
         friend SDF operator&(const SDF& lhs, const SDF& rhs) {
             return SDF([=](const Vec3d& pos) {
                 return std::max(lhs(pos), rhs(pos));
             });
         }
 
-        friend SDF operator^(const SDF& lhs, const SDF& rhs) {
-            return lhs & ~rhs;
+        // Subtract one shape from another
+        friend SDF operator-(const SDF& lhs, const SDF& rhs) {
+            return SDF([=](const Vec3d& pos) {
+                return std::max(lhs(pos), -rhs(pos));
+            });
         }
         
-        // Shifting SDFs Around
+        // Add to the position of a shape
+        friend SDF operator+(const Vec3d& lhs, const SDF& rhs) { return rhs + lhs; }
         friend SDF operator+(const SDF& lhs, const Vec3d& rhs) {
             return SDF([=](const Vec3d& pos) {
                 return lhs(pos - rhs);
             });
         }
 
-        friend SDF operator+(const Vec3d& lhs, const SDF& rhs) {
-            return rhs + lhs;
-        }
-
+        // Add radius to the SDF function
+        friend SDF operator+(const double lhs, const SDF& rhs) { return rhs + lhs; }
         friend SDF operator+(const SDF& lhs, const double rhs) {
             return SDF([=](const Vec3d& pos) {
                 return lhs(pos) - rhs;
             });
         }
 
-        friend SDF operator+(const double lhs, const SDF& rhs) {
-            return rhs + lhs;
-        }
-
+        // Subtract position from the shape
         friend SDF operator-(const SDF& lhs, const Vec3d& rhs) {
             return SDF([=](const Vec3d& pos) {
                 return lhs(pos + rhs);
             });
         }
 
+        // Remove radius from the SDF function
         friend SDF operator-(const SDF& lhs, const double rhs) {
             return SDF([=](const Vec3d& pos) {
                 return lhs(pos) + rhs;
             });
         }
 
+        // Stretch Shape by a certain vector
+        friend SDF operator*(const Vec3d& lhs, const SDF& rhs) { return rhs * lhs; }
         friend SDF operator*(const SDF& lhs, const Vec3d& rhs) {
             return SDF([=](const Vec3d& pos) {
                 return lhs(pos / rhs) * std::min(rhs.x, std::min(rhs.y, rhs.z));
             });
         }
 
-        friend SDF operator*(const Vec3d& lhs, const SDF& rhs) {
-            return rhs * lhs;
-        }
-
+        // Scale a Shape
+        friend SDF operator*(const double& lhs, const SDF& rhs) { return rhs * lhs; }
         friend SDF operator*(const SDF& lhs, const double& rhs) {
             return SDF([=](const Vec3d& pos) {
                 return lhs(pos / rhs) * rhs;
             });
-        }
-
-        friend SDF operator*(const double& lhs, const SDF& rhs) {
-            return rhs * lhs;
         }
     };
 

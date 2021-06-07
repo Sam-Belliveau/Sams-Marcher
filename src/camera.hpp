@@ -30,7 +30,7 @@ namespace sb {
     
     public: // Functions
         void setFov(double fov) {
-            _fov_mul = std::tan(3.1416 * fov / 360.0);
+            _fov_mul = std::tan(SPGL::Math::Pi * fov / 360.0);
         }
 
         void setPos(Vec3d pos) {
@@ -39,13 +39,32 @@ namespace sb {
         }
 
         Ray operator()(const std::size_t x, const std::size_t y) const {
-            const Vec3d x_dir = Vec3d(_dir.z, 0, -_dir.x).normalize();
-            const Vec3d y_dir = Vec3d(_dir.x*_dir.y, _dir.y - std::hypot(_dir.x, _dir.z), _dir.z*_dir.y).normalize(); 
+            // These vectors are all at 90 degrees from eachother
+            // We can prove this by taking the dot product between theme    
+            //
+            // DOT PRODUCT FOR X_DIR:
+            // dot = dir.x * (dir.z) 
+            //     + dir.y * (0) 
+            //     + dir.z * (-dir.x) 
+            //     ==================
+            //       0
+            //
+            // DOT PRODUCT FOR Y_DIR:
+            // dot = dir.x * (dir.y * dir.x) 
+            //     + dir.y * (-(dir.z * dir.z + dir.x * dir.x)) 
+            //     + dir.z * (dir.y * dir.z) 
+            //     ==================
+            //       0
+            //
+            // Because of this we know that our projection is being done correctly
+            
+            const Vec3d dir = _dir;
+            const Vec3d x_dir = Vec3d( dir.z, 0, -dir.x ).norm();
+            const Vec3d y_dir = Vec3d( dir.y * dir.x, -(dir.z * dir.z + dir.x * dir.x), dir.y * dir.z).norm(); 
 
             double dx = _fov_mul * 2.0 * ((double(x) / double(_width)) - 0.5) * double(_width) / double(_height);
             double dy = _fov_mul * 2.0 * ((double(y) / double(_height)) - 0.5);
 
-            
             return Ray(
                 _pos, (_dir + dx * x_dir + dy * y_dir).norm()
             );

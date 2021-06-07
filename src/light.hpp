@@ -12,7 +12,17 @@ namespace sb {
 
     class Material {
     public:
-        const double k_s, k_d, k_a, a;
+        // Specularity
+        const double k_s;
+        
+        // Diffusion
+        const double k_d;
+
+        // Ambiance 
+        const double k_a;
+
+        // Specularity Amount
+        const double a;
 
     public:
         Material(double k_s, double k_d, double k_a, double a)
@@ -20,7 +30,7 @@ namespace sb {
     
     };
 
-    const Material DEFAULT_MATERIAL = Material(4, 1, 0.1, 48);
+    const Material DEFAULT_MATERIAL = Material(2, 0.5, 0.1, 96);
     
     class Light {
     private:
@@ -33,42 +43,47 @@ namespace sb {
         : _pos{pos}, _color{color}, _bright{bright} {}
 
     private: // Helper Functions
-        double getMarchClearance(const SDF& sdf, const Vec3d& pos) const {
-            SDF lightSDF([=](const Vec3d& pos){ return (_pos - pos).mag(); });
+        bool getDirectLight(const SDF& sdf, const Vec3d& pos) const {
+            // Get ray from point towards light
             Ray ray = Ray(pos, _pos - pos).fix(sdf, FIXING_RATIO * LIGHTING_EPS);
 
             for(int i = 0; i < MAX_MARCH_ITER_LIGHTING; ++i) {
+                double distance = (_pos - ray.pos()).mag();
                 double step = sdf(ray.pos());
+                
+                // If you hit something, there is no light
+                if(step < LIGHTING_EPS) return false;
 
-                if(step < LIGHTING_EPS) {
-                    return 0.0;
-                }
+                // If the light is closer to you than the scene, there is light
+                if(distance < step) return true;
 
-                if(lightSDF(ray.pos()) < step) {
-                    break;
-                }
-
+                // If you do not know, just step
                 ray = ray.step(step);
             }
 
-            return 1.0;
+            return false;
         }
 
     public: // Functions
         SPGL::Color getColor(const SDF& sdf, const Ray& ray, const Material& mat = DEFAULT_MATERIAL) const {
-            const Vec3d ray_pos = ray.pos();
-            const Vec3d ray_dir = ray.dir();
-            const Vec3d normal = sdf.normal(ray_pos);
-            const Vec3d rel_pos = _pos - ray_pos;
-            const Ray light_ray = Ray(ray_pos, -rel_pos);
-            const Vec3d light_dir = light_ray.reflect(sdf).dir();
+
+            // Relative Position / Distance
+            const Vec3d rel_pos = _pos - ray.pos();
             const double dist = rel_pos.mag();
 
-            const double clear = getMarchClearance(sdf, ray_pos);
+            // Ambient Lighting
             double brightness = mat.k_a;
-            brightness += clear * mat.k_d * std::max(0.0, (normal.dot(rel_pos.norm())));
-            brightness += clear * mat.k_s * std::pow(std::max(0.0, ((-ray_dir).dot(light_dir))), mat.a);
 
+            // If there is direct light, do some more lighting
+            if(getDirectLight(sdf, ray.pos())) {
+                const Vec3d normal = sdf.normal(ray.pos());
+                const Vec3d light_dir = Ray(ray.pos(), -rel_pos).reflect(sdf).dir();
+
+                brightness += mat.k_d * std::max(0.0, (normal.dot(rel_pos.norm())));
+                brightness += mat.k_s * std::pow(std::max(0.0, -(ray.dir().dot(light_dir))), mat.a);
+            }
+
+            // Return Color Multiplied by Brightness
             return (_bright * brightness / (dist * dist)) * _color;
         }
     };

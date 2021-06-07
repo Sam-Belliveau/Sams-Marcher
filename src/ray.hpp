@@ -23,7 +23,7 @@ namespace sb {
         }
         
         const Vec3d dir() const {
-            return _dir.norm();
+            return _dir;
         }
         
     public: // Functions
@@ -36,10 +36,10 @@ namespace sb {
             return step(sdf(pos()));
         }
 
-        Ray reflect(SDF sdf) const {
+        Ray reflect(SDF sdf, double eps = 0.0) const {
             const Vec3d d = dir();
             const Vec3d n = sdf.normal(pos());
-            return Ray(pos(), d - 2 * n * (d.dot(n)));
+            return Ray(pos() + eps * n, d - 2 * n * (d.dot(n)));
         }
 
         Ray fix(SDF sdf, double eps) {
