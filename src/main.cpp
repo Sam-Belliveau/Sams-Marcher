@@ -27,7 +27,7 @@ int main() {
                 Mat3d::Pitch(PI/2) * SDF::Cylinder(1) |
                 Mat3d::Roll(PI/2) * SDF::Cylinder(1)
             ) 
-            & SDF::Box(Vec3d(5, 5, 5))
+            & SDF::Sphere(6)
         )
         | SDF::Plane(Vec3d(0, 1, 0), 6);
     

@@ -4,7 +4,7 @@
 namespace sb {
 
     // Data type we are using for rendering
-    using FloatT = double;
+    using FloatT = float;
 
     // Max Number of Reflections
     constexpr int MAX_HITS = 2;
@@ -15,7 +15,7 @@ namespace sb {
 
     // The EPS allowed for different situations
     constexpr FloatT EPS = 1e-2;
-    constexpr FloatT NORM_EPS = 1e-6;
+    constexpr FloatT NORM_EPS = 1e-4;
     constexpr FloatT LIGHTING_EPS = 1e-2;
 
     // How far away ray should be placed when reflections happen
