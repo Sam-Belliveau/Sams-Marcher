@@ -1,36 +1,40 @@
-#ifndef SAM_B_CONSTANTS_HPP
-#define SAM_B_CONSTANTS_HPP
+#ifndef SAM_B_constexprANTS_HPP
+#define SAM_B_constexprANTS_HPP
 
 namespace sb {
+
+    // Data type we are using for rendering
+    using FloatT = double;
+
     // Max Number of Reflections
-    const int MAX_HITS = 4;
+    constexpr int MAX_HITS = 2;
 
     // Max Number of Steps allowed when Marching
-    const int MAX_MARCH_ITER = 128;
-    const int MAX_MARCH_ITER_LIGHTING = 128;
+    constexpr int MAX_MARCH_ITER = 128;
+    constexpr int MAX_MARCH_ITER_LIGHTING = 128;
 
     // The EPS allowed for different situations
-    const double EPS = 1e-2;
-    const double NORM_EPS = 1e-6;
-    const double LIGHTING_EPS = 1e-2;
+    constexpr FloatT EPS = 1e-2;
+    constexpr FloatT NORM_EPS = 1e-6;
+    constexpr FloatT LIGHTING_EPS = 1e-2;
 
     // How far away ray should be placed when reflections happen
-    const double FIXING_RATIO = 4;
+    constexpr FloatT FIXING_RATIO = 4;
 
     // How much darker the reflections should be
-    const double REFLECTIVE_DAMPENING = 1.25;
+    constexpr FloatT REFLECTIVE_DAMPENING = 2.5;
 
     // Max amount of distance Ray Marching should go without assuming it will tend to infinity
-    const double MAX_STEP = 32;
+    constexpr FloatT MAX_STEP = 32;
 
     // Number of threads the CPU should use
-    const int THREADS = 24;
+    constexpr int THREADS = 24;
 
     // Resolution
-    const int WIDTH = 1920;
-    const int HEIGHT = 1080;
+    constexpr int WIDTH = 1280;
+    constexpr int HEIGHT = 720;
 
-    const int PIXELS = WIDTH*HEIGHT;
+    constexpr int PIXELS = WIDTH*HEIGHT;
 }
 
 #endif

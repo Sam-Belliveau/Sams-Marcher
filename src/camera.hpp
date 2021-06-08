@@ -13,32 +13,31 @@ namespace sb {
     class Camera {
 
     private: // Variables
+        std::size_t _width, _height;
+        FloatT _fov_mul;
+
         Vec3d _pos;
         Vec3d _dir;
         
-        double _fov_mul;
-        std::size_t _width, _height;
-
     public: // Constructors
-        Camera(const std::size_t width, const std::size_t height, double fov = 90.0) {
-            _width = width;
-            _height = height;
-
-            setFov(fov);
-            setPos(Vec3d(1,0,0));
-        }
+        constexpr Camera(const std::size_t width, const std::size_t height, FloatT fov = 90.0) 
+            : _width{width}
+            , _height{height}
+            , _fov_mul{std::tan(FloatT(SPGL::Math::Pi) * fov / 360.0)}
+            , _pos{Vec3d(1, 1, 1)}
+            , _dir{(-_pos).norm()} {}
     
     public: // Functions
-        void setFov(double fov) {
+        constexpr void setFov(FloatT fov) {
             _fov_mul = std::tan(SPGL::Math::Pi * fov / 360.0);
         }
 
-        void setPos(Vec3d pos) {
+        constexpr void setPos(Vec3d pos) {
             _pos = pos;
             _dir = (-pos).norm();
         }
 
-        Ray operator()(const std::size_t x, const std::size_t y) const {
+        constexpr Ray operator()(const std::size_t x, const std::size_t y) const {
             // These vectors are all at 90 degrees from eachother
             // We can prove this by taking the dot product between theme    
             //
@@ -62,8 +61,8 @@ namespace sb {
             const Vec3d x_dir = Vec3d( dir.z, 0, -dir.x ).norm();
             const Vec3d y_dir = Vec3d( dir.y * dir.x, -(dir.z * dir.z + dir.x * dir.x), dir.y * dir.z).norm(); 
 
-            double dx = _fov_mul * 2.0 * ((double(x) / double(_width)) - 0.5) * double(_width) / double(_height);
-            double dy = _fov_mul * 2.0 * ((double(y) / double(_height)) - 0.5);
+            FloatT dx = _fov_mul * 2.0 * ((FloatT(x) / FloatT(_width)) - 0.5) * FloatT(_width) / FloatT(_height);
+            FloatT dy = _fov_mul * 2.0 * ((FloatT(y) / FloatT(_height)) - 0.5);
 
             return Ray(
                 _pos, (_dir + dx * x_dir + dy * y_dir).norm()

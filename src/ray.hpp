@@ -13,21 +13,21 @@ namespace sb {
         Vec3d _dir;
 
     public: // Constructors 
-        Ray(const Vec3d& pos, const Vec3d& dir) : _pos{pos}, _dir{dir.norm()} {}
-        Ray(const Ray&) = default;
-        Ray& operator=(const Ray&) = default;
+        constexpr Ray(const Vec3d& pos, const Vec3d& dir) : _pos{pos}, _dir{dir.norm()} {}
+        constexpr Ray(const Ray&) = default;
+        constexpr Ray& operator=(const Ray&) = default;
 
     public: // Getters
-        const Vec3d pos() const {
+        constexpr const Vec3d pos() const {
             return _pos;
         }
         
-        const Vec3d dir() const {
+        constexpr const Vec3d dir() const {
             return _dir;
         }
         
     public: // Functions
-        Ray step(double distance) const {
+        constexpr Ray step(FloatT distance) const {
             const Vec3d d = dir();
             return Ray(pos() + distance * d, d);
         }
@@ -36,13 +36,13 @@ namespace sb {
             return step(sdf(pos()));
         }
 
-        Ray reflect(SDF sdf, double eps = 0.0) const {
+        Ray reflect(SDF sdf, FloatT eps = 0.0) const {
             const Vec3d d = dir();
             const Vec3d n = sdf.normal(pos());
             return Ray(pos() + eps * n, d - 2 * n * (d.dot(n)));
         }
 
-        Ray fix(SDF sdf, double eps) {
+        Ray fix(SDF sdf, FloatT eps) {
             const Vec3d n = sdf.normal(pos());
             return Ray(pos() + eps * n, dir());
         }
