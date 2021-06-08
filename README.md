@@ -2,6 +2,7 @@
 
 ## Most Updated Image
 ![New Img](https://i.imgur.com/zDHzKrr.png)
+![New Img](https://i.imgur.com/ZQpyQwl.png)
 
 ## What It Used To Look Like
 ![Old Img](https://i.imgur.com/vblAWKT.png)
