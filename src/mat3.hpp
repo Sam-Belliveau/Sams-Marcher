@@ -16,11 +16,13 @@ namespace sb {
 
     public: // Factories
         
-        static constexpr Mat3 Identity{
-            {T(1),T(0),T(0)},
-            {T(0),T(1),T(0)},
-            {T(0),T(0),T(1)}
-        };
+        constexpr static Mat3 Identity() {
+            return Mat3(
+                {T(1),T(0),T(0)},
+                {T(0),T(1),T(0)},
+                {T(0),T(0),T(1)}
+            );
+        }
 
         constexpr static Mat3 Pitch(const T& t) {
             const T S = std::sin(t);

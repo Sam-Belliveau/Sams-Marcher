@@ -23,7 +23,7 @@ int main() {
     const SDF sdf = 
         Mat3d::Pitch(PI / 4) * Mat3d::Roll(PI / 4) * (
             (
-                Mat3d::Identity * SDF::Cylinder(1) |
+                Mat3d::Identity() * SDF::Cylinder(1) |
                 Mat3d::Pitch(PI/2) * SDF::Cylinder(1) |
                 Mat3d::Roll(PI/2) * SDF::Cylinder(1)
             ) 

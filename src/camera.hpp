@@ -20,7 +20,7 @@ namespace sb {
         Vec3d _dir;
         
     public: // Constructors
-        constexpr Camera(const std::size_t width, const std::size_t height, FloatT fov = 90.0) 
+        Camera(const std::size_t width, const std::size_t height, FloatT fov = 90.0) 
             : _width{width}
             , _height{height}
             , _fov_mul{std::tan(FloatT(SPGL::Math::Pi) * fov / 360.0)}
@@ -28,16 +28,16 @@ namespace sb {
             , _dir{(-_pos).norm()} {}
     
     public: // Functions
-        constexpr void setFov(FloatT fov) {
+        void setFov(FloatT fov) {
             _fov_mul = std::tan(SPGL::Math::Pi * fov / 360.0);
         }
 
-        constexpr void setPos(Vec3d pos) {
+        void setPos(Vec3d pos) {
             _pos = pos;
             _dir = (-pos).norm();
         }
 
-        constexpr Ray operator()(const std::size_t x, const std::size_t y) const {
+        Ray operator()(const std::size_t x, const std::size_t y) const {
             // These vectors are all at 90 degrees from eachother
             // We can prove this by taking the dot product between theme    
             //

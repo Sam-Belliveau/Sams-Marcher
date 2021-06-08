@@ -21,43 +21,38 @@ namespace sb {
         Scene(const SDF& scene, const std::vector<Light>& lights, const SPGL::Image& image) 
             : scene{scene}, lights{lights}, image{image}, camera{Camera(image.width(), image.height())} {}
 
-    public: // Functions
-        SPGL::Color getPixel(SPGL::Size x, SPGL::Size y) const {
-            SPGL::Color out = SPGL::Color::Black;
-
-            Ray ray = Ray(camera(x, y));
-
-            int hits = 0;
-            double distance = 0;
-            double step = 0;
-
+    private: // Helper Functions
+        SPGL::Color march(Ray ray, std::size_t hits) const {
+            
             for(int i = 0; i < MAX_MARCH_ITER; ++i) {
-                step = scene(ray.pos());
-                distance += step;
+                double step = scene(ray.pos());
                 
                 if(MAX_STEP < step) {
-                    break;
-                }
-
-                if(MAX_HITS < hits) {
-                    break;
+                    break; 
                 }
 
                 if(step < EPS) {
-                    double darkness = std::pow(REFLECTIVE_DAMPENING, hits);
-
-                    for(const Light& l : lights) {
-                        out += l.getColor(scene, ray) / darkness;
+                    SPGL::Color out = SPGL::Color::Black;
+                    
+                    for(const auto& l : lights) 
+                        out += l.getColor(scene, ray);
+                    
+                    if(0 < hits) {
+                        out += march(ray.reflect(scene, i * FIXING_RATIO * EPS), hits - 1) / REFLECTIVE_DAMPENING;
                     }
 
-                    ray = ray.reflect(scene, FIXING_RATIO * EPS);
-                    hits += 1;
-                } else {
-                    ray = ray.step(step);
+                    return out; 
                 }
+
+                ray = ray.step(step);
             }
 
-            return out;
+            return 0.25 * SPGL::Color::Cyan;
+        }
+
+    public: // Functions
+        SPGL::Color getPixel(SPGL::Size x, SPGL::Size y) const {
+            return march(Ray(camera(x, y)), MAX_HITS);
         }
 
         void updatePixel(SPGL::Size x, SPGL::Size y) {

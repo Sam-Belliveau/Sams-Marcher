@@ -1,17 +1,17 @@
-#ifndef SAM_B_constexprANTS_HPP
-#define SAM_B_constexprANTS_HPP
+#ifndef SAM_B_CONSTANTS_HPP
+#define SAM_B_CONSTANTS_HPP
 
 namespace sb {
 
     // Data type we are using for rendering
-    using FloatT = float;
+    using FloatT = double;
 
     // Max Number of Reflections
     constexpr int MAX_HITS = 2;
 
     // Max Number of Steps allowed when Marching
-    constexpr int MAX_MARCH_ITER = 128;
-    constexpr int MAX_MARCH_ITER_LIGHTING = 128;
+    constexpr int MAX_MARCH_ITER = 256;
+    constexpr int MAX_MARCH_ITER_LIGHTING = 256;
 
     // The EPS allowed for different situations
     constexpr FloatT EPS = 1e-2;
@@ -22,7 +22,7 @@ namespace sb {
     constexpr FloatT FIXING_RATIO = 4;
 
     // How much darker the reflections should be
-    constexpr FloatT REFLECTIVE_DAMPENING = 2.5;
+    constexpr FloatT REFLECTIVE_DAMPENING = 2;
 
     // Max amount of distance Ray Marching should go without assuming it will tend to infinity
     constexpr FloatT MAX_STEP = 32;
