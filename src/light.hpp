@@ -30,7 +30,7 @@ namespace sb {
     
     };
 
-    const Material DEFAULT_MATERIAL = Material(4, 1, 0.1, 96);
+    const Material DEFAULT_MATERIAL = Material(8, 0.4, 0.05, 256);
     
     class Light {
     private:
