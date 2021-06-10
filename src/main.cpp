@@ -47,8 +47,8 @@ int main() {
     FloatT t = 1.5;
     while(window.isRunning()) {
         t += 0.2;
-        scene.camera.setFov(90);
-        scene.camera.setPos(Vec3d(12*std::cos(t), 6, 12*std::sin(t)));
+        scene.camera.setFov(75);
+        scene.camera.setPos(Vec3d(16*std::cos(t), 10, 16*std::sin(t)));
 
         for(int g = 0; g < THREADS; ++g) {
             threads[g] = std::thread([=,&scene]() {
