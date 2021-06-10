@@ -23,7 +23,7 @@ namespace sb {
         Camera(const std::size_t width, const std::size_t height, FloatT fov = 90.0) 
             : _width{width}
             , _height{height}
-            , _fov_mul{std::tan(FloatT(SPGL::Math::Pi) * fov / 360.0)}
+            , _fov_mul{FloatT(std::tan(FloatT(SPGL::Math::Pi) * fov / FloatT(360.0)))}
             , _pos{Vec3d(1, 1, 1)}
             , _dir{(-_pos).norm()} {}
     

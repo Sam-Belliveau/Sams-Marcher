@@ -41,6 +41,15 @@ namespace sb {
             });
         }
 
+        static SDF Squircle(const FloatT radius) {
+            return SDF([=](const Vec3d& pos) {
+                double x = pos.x; x *= x; x *= x;
+                double y = pos.y; y *= y; y *= y;
+                double z = pos.z; z *= z; z *= z;
+                return std::sqrt(std::sqrt(x + y + z)) - radius;
+            });
+        }
+
     private: // Variables
         SDFBase _func;
 

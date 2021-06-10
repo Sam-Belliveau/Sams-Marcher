@@ -22,7 +22,7 @@ namespace sb {
             : scene{scene}, lights{lights}, image{image}, camera{Camera(image.width(), image.height())} {}
 
     private: // Helper Functions
-        SPGL::Color march(Ray ray, std::size_t hits) const {
+        SPGL::Color march(Ray ray, std::size_t hits, const Material& mat = DEFAULT_MATERIAL) const {
             
             for(int i = 0; i < MAX_MARCH_ITER; ++i) {
                 double step = scene(ray.pos());
@@ -33,12 +33,13 @@ namespace sb {
 
                 if(step < EPS) {
                     SPGL::Color out = SPGL::Color::Black;
-                    
+                    const FloatT f = fresnel(mat.k_s, scene.normal(ray.pos()), -ray.dir());
+
                     for(const auto& l : lights) 
-                        out += l.getColor(scene, ray);
+                        out += l.getColor(scene, ray, mat);
                     
                     if(0 < hits) {
-                        out += march(ray.reflect(scene, i * FIXING_RATIO * EPS), hits - 1) / REFLECTIVE_DAMPENING;
+                        out += march(ray.reflect(scene, i * FIXING_RATIO * EPS), hits - 1) * f;
                     }
 
                     return out; 
@@ -47,7 +48,14 @@ namespace sb {
                 ray = ray.step(step);
             }
 
-            return 0.25 * SPGL::Color::Cyan;
+            double h = std::hypot(ray.dir().x, ray.dir().z);
+            double wa = std::atan2(ray.dir().x, ray.dir().z);
+            double ha = std::atan2(h, ray.dir().y);
+            int iw = (23 * int(wa * 128));
+            int ih = (19 * int(ha * 128));
+            
+            if((iw + ih) % 200 == 0) return 12 * AMBIENT_COLOR;
+            return AMBIENT_COLOR;
         }
 
     public: // Functions

@@ -21,7 +21,7 @@ int main() {
     const FloatT PI = SPGL::Math::Pi;
 
     const SDF sdf = 
-        Mat3d::Pitch(PI / 4) * Mat3d::Roll(PI / 4) * (
+        Vec3(5, 0, 0) + Mat3d::Pitch(PI / 4) * Mat3d::Roll(PI / 4) * (
             (
                 Mat3d::Identity() * SDF::Cylinder(1) |
                 Mat3d::Pitch(PI/2) * SDF::Cylinder(1) |
@@ -29,13 +29,16 @@ int main() {
             ) 
             & SDF::Sphere(6)
         )
+        | Vec3(-5, 0, 0) + Mat3d::Pitch(PI / 6) * Mat3d::Roll(PI / 6) * (
+            SDF::Squircle(2)
+        )
         | SDF::Plane(Vec3d(0, 1, 0), 6);
     
     const std::vector<Light> lights = {
-        Light(Vec3d(16, 16, 0), SPGL::Color(255, 64, 16), 160),
-        Light(Vec3d(0, 16, 16), SPGL::Color(16, 255, 64), 160),
-        Light(Vec3d(-16, 16, 0), SPGL::Color(64, 16, 255), 160),
-        Light(Vec3d(0, 16, -16), SPGL::Color(255, 255, 64), 128)
+        Light(Vec3d(16, 16, 0), SPGL::Color(255, 64, 16), 320),
+        Light(Vec3d(0, 16, 16), SPGL::Color(16, 255, 64), 320),
+        Light(Vec3d(-16, 16, 0), SPGL::Color(64, 16, 255), 320),
+        Light(Vec3d(0, 16, -16), SPGL::Color(255, 255, 64), 240)
     };
 
     Scene scene(sdf, lights, SPGL::Image(WIDTH, HEIGHT));
@@ -44,7 +47,8 @@ int main() {
     FloatT t = 1.5;
     while(window.isRunning()) {
         t += 0.2;
-        scene.camera.setPos(Vec3d(10*std::cos(t), 5, 10*std::sin(t)));
+        scene.camera.setFov(90);
+        scene.camera.setPos(Vec3d(12*std::cos(t), 6, 12*std::sin(t)));
 
         for(int g = 0; g < THREADS; ++g) {
             threads[g] = std::thread([=,&scene]() {

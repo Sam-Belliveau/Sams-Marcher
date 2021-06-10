@@ -30,8 +30,12 @@ namespace sb {
     
     };
 
-    constexpr Material DEFAULT_MATERIAL = Material(4, 1, 0.1, 256);
+    constexpr Material DEFAULT_MATERIAL = Material(0.3, 1, 0.00, 96);
     
+    FloatT fresnel(const FloatT& ks, const Vec3d& h, const Vec3d& l) {
+        return ks + (FloatT(1.0) - ks) * std::pow(std::clamp(FloatT(1.0) - h.dot(l), FloatT(0.0), FloatT(1.0)), 5);
+    }
+
     class Light {
     private:
         Vec3d _pos;
@@ -80,8 +84,13 @@ namespace sb {
                 const Vec3d normal = sdf.normal(ray.pos());
                 const Vec3d light_dir = Ray(ray.pos(), -rel_pos).reflect(sdf).dir();
 
-                brightness += mat.k_d * std::max(FloatT(0), (normal.dot(rel_pos.norm())));
-                brightness += mat.k_s * std::pow(std::max(FloatT(0), -(ray.dir().dot(light_dir))), mat.a);
+                const Vec3d h = rel_pos.norm();
+                const Vec3d l = (h - ray.dir()).norm();
+
+                const FloatT f = fresnel(mat.k_s, l, h);
+
+                brightness += (FloatT(1.0) - f) * mat.k_d * std::max(FloatT(0), (normal.dot(rel_pos.norm())));
+                brightness += (FloatT(0.0) + f) * std::pow(std::max(FloatT(0), -(ray.dir().dot(light_dir))), mat.a);
             }
 
             // Return Color Multiplied by Brightness
