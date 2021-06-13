@@ -37,7 +37,13 @@ namespace sb {
 
         static SDF Cylinder(const FloatT radius) {
             return SDF([=](const Vec3d& pos) {
-                return std::hypot(pos.x, pos.y) - radius;
+                return std::hypot(pos.x, pos.z) - radius;
+            });
+        }
+
+        static SDF Squilindar(const FloatT radius) {
+            return SDF([=](const Vec3d& pos) {
+                return std::sqrt(std::hypot(pos.x * pos.x, pos.z * pos.z)) - radius;
             });
         }
 

@@ -1,6 +1,8 @@
 # Sam-Marcher
 
 ## Most Updated Image
+![New Img](https://i.imgur.com/Q3Q9VXx.png)
+![New Img](https://i.imgur.com/NdWu96Z.png)
 ![New Img](https://i.imgur.com/9c9nUeT.png)
 ![New Img](https://i.imgur.com/YZy2dtL.png)
 

@@ -24,10 +24,12 @@ namespace sb {
     private: // Helper Functions
         SPGL::Color march(Ray ray, std::size_t hits, const Material& mat = DEFAULT_MATERIAL) const {
             
+            double distance = 0.0;
             for(int i = 0; i < MAX_MARCH_ITER; ++i) {
                 double step = scene(ray.pos());
+                distance += step;
                 
-                if(MAX_STEP < step) {
+                if(MAX_DISTANCE < distance) {
                     break; 
                 }
 
@@ -48,13 +50,6 @@ namespace sb {
                 ray = ray.step(step);
             }
 
-            double h = std::hypot(ray.dir().x, ray.dir().z);
-            double wa = std::atan2(ray.dir().x, ray.dir().z);
-            double ha = std::atan2(h, ray.dir().y);
-            int iw = (23 * int(wa * 128));
-            int ih = (19 * int(ha * 128));
-            
-            if((iw + ih) % 200 == 0) return 12 * AMBIENT_COLOR;
             return AMBIENT_COLOR;
         }
 

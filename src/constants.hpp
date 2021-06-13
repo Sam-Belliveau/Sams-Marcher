@@ -9,7 +9,7 @@ namespace sb {
     using FloatT = double;
 
     // Max Number of Reflections
-    constexpr int MAX_HITS = 2;
+    constexpr int MAX_HITS = 4;
 
     // Max Number of Steps allowed when Marching
     constexpr int MAX_MARCH_ITER = 320;
@@ -27,14 +27,14 @@ namespace sb {
     constexpr SPGL::Color AMBIENT_COLOR = SPGL::Color(24, 16, 64);
 
     // Max amount of distance Ray Marching should go without assuming it will tend to infinity
-    constexpr FloatT MAX_STEP = 32;
+    constexpr FloatT MAX_DISTANCE = 256;
 
     // Number of threads the CPU should use
     constexpr int THREADS = 24;
 
     // Resolution
-    constexpr int WIDTH = 1280;
-    constexpr int HEIGHT = 720;
+    constexpr int WIDTH = 720;
+    constexpr int HEIGHT = 480;
 
     constexpr int PIXELS = WIDTH*HEIGHT;
 }
